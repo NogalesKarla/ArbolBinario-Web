@@ -306,5 +306,92 @@ namespace ClassArbol
             }
             return false;
         }
+
+        public Nodo obtenerNodoReemplazo(Nodo nodoReemplazo)
+        {
+            Nodo reemplazarPadre = nodoReemplazo;
+            Nodo reemplazo = nodoReemplazo;
+            Nodo auxiliar = nodoReemplazo.der;
+            while (auxiliar != null) {
+                reemplazarPadre = reemplazo;
+                reemplazo = auxiliar;
+                auxiliar = auxiliar.izq;
+            }
+            if (reemplazo != nodoReemplazo.der) {
+                reemplazarPadre.izq = reemplazarPadre;
+                reemplazo.der = nodoReemplazo.der;
+            }
+            return reemplazo;
+        }
+
+        public Boolean eliminar(int d) {
+            Nodo auxiliar = Raiz;
+            Nodo padre = Raiz;
+            Boolean esHijoIzq = true;
+            while (auxiliar.Elem != d) {
+                padre = auxiliar;
+                if (d < auxiliar.Elem)
+                {
+                    esHijoIzq = true;
+                    auxiliar = auxiliar.izq;
+                }
+                else {
+                    esHijoIzq = false;
+                    auxiliar = auxiliar.der;
+                }
+                if (auxiliar == null) {
+                    return false;
+                }
+            }//fin del while
+
+            if (auxiliar.izq == null  && auxiliar.der == null) {
+                if (esHijoIzq)
+                {
+                    padre.izq = null;
+                }
+                else {
+                    padre.der = null;
+                }
+            }
+            else if (auxiliar.der == null) {
+                if (esHijoIzq)
+                {
+                    padre.izq = auxiliar.izq;
+                }
+                else
+                {
+                    padre.der = auxiliar.izq;
+                }
+            }
+            else if (auxiliar.izq == null)
+            {
+                if (esHijoIzq)
+                {
+                    padre.izq = auxiliar.der;
+                }
+                else
+                {
+                    padre.der = auxiliar.izq;
+                }
+            }
+            else {
+                Nodo reemplazo = obtenerNodoReemplazo(auxiliar);
+                if (esHijoIzq)
+                {
+                    padre.izq = reemplazo;
+                }
+                else {
+                    padre.der = reemplazo;
+                }
+                reemplazo.izq = auxiliar.izq;
+            }
+            return true;
+         }
+    
+    
+    
+    
+    
+    
     }
 }
